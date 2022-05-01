@@ -1,0 +1,49 @@
+version: "3.2"
+services:
+  db:
+    image: mariadb:10.6
+    container_name: db_momg
+    restart: always
+    env_file: ./.env
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --sql-mode="${MYSQL_MODE}"
+    ports:
+      - 3306:3306
+    volumes:
+      # - ./mariadb.cnf:/etc/mysql/mariadb.cnf:rw
+      - ./efs/data/mysql:/var/lib/mysql
+      - ./efs/backup:/backup
+    networks:
+      - momg_net
+    healthcheck:
+      test: ["CMD", "mysqladmin ", "ping", "--silent"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+
+  # splunk_uf:
+  #   image: splunk/universalforwarder:8.0
+  #   container_name: splunk_uf_momg
+  #   restart: always
+  #   env_file: ./.env
+  #   ports:
+  #     - 9997:9997
+  #   networks:
+  #     - momg_net
+
+  phpmyadmin:
+    image: phpmyadmin:5.0
+    container_name: phpmyadmin_momg
+    restart: always
+    env_file: .env
+    links:
+      - db:mysql
+    ports:
+      - 8080:80
+    depends_on:
+      - db
+    networks:
+      - momg_net
+
+networks:
+  momg_net:
+    driver: bridge

@@ -1,0 +1,17 @@
+version: "3.2"
+services:
+  
+  wordpress:
+      image: wordpress:php7.4-apache
+      container_name: wordpress_momg
+      env_file: .env      
+      ports:
+        - 80:80
+      restart: always
+      volumes: ['/efs/wordpress:/var/www/html']
+
+      networks:
+        - momg_net
+
+networks:
+  momg_net:

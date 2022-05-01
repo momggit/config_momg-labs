@@ -1,0 +1,12 @@
+version: "3.2"
+services:
+  tinyproxy:
+    image: vimagick/tinyproxy:latest
+    container_name: tinyproxy
+    ports:
+      - 8000:8888
+    volumes:
+      - ./tinyproxy.conf:/etc/tinyproxy/tinyproxy.conf:rw
+      - ./data:/etc/tinyproxy
+    restart: unless-stopped
+

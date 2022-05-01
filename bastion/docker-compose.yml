@@ -1,0 +1,6 @@
+version: "3.2"
+services:
+  siem:
+    image: momg/siemsframework:1.0
+    container_name: siem
+    command: bash -c "tail -f /dev/null"

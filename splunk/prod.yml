@@ -1,0 +1,27 @@
+version: "3.2"
+services:
+  splunk:
+    image: splunk/splunk:8.0
+    env_file: .env
+    container_name: splunk
+    ports:
+      - 8000:8000
+      - 8088:8088
+      - 8089:8089
+      - 8065:8065
+      - 8191:8191
+      - 22:22
+      - 9997:9997
+      - 9887:9887
+    entrypoint: /bin/bash
+    command:  "/sbin/entrypoint.sh start"
+    volumes:
+      # - ./splunk-launch.conf:/opt/splunk/etc/splunk-launch.conf:ro
+      #- ./server.conf:/opt/splunk/etc/system/local/server.conf:rw
+      - /efs/data_splunk_var:/opt/splunk/var/
+      - /efs/data_splunk_etc:/opt/splunk/etc/
+    restart: unless-stopped
+
+# volumes:
+#   data_splunk_var:
+#   data_splunk_etc:
